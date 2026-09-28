@@ -1,12 +1,14 @@
+using CLI.UI.ManageUsers;
 using RepositoryContracts;
+using CLI.UI.ManagePosts;
 
 namespace CLI.UI;
 
 public class CliApp
 {
-    private IUserRepository userRepository; 
-    private ICommentRepository commentRepository;
-    private IPostRepository postRepository;
+    private readonly IUserRepository userRepository; 
+    private  readonly ICommentRepository commentRepository;
+    private readonly IPostRepository postRepository;
 
     public CliApp(
         IUserRepository userRepository,
@@ -24,44 +26,36 @@ public class CliApp
         {
             Console.WriteLine(); 
             Console.WriteLine("Welcome to RedditRum"); 
-            Console.WriteLine("1. Create User"); 
-            Console.WriteLine("2. View Posts"); 
+            Console.WriteLine("1. Manage users"); 
+            Console.WriteLine("2. Manage Posts"); 
             Console.WriteLine("3. Exit");
         
         //Læs fra brugerens input
         string? input = Console.ReadLine();
-
-        if (input == "1")
+        
+        switch (input)
         {
-            Console.WriteLine("Create User selected");
-        }
-        else if (input == "2")
-        {
-            Console.WriteLine("View Posts selected");
-        }
-        else if (input == "3")                         
-        {                                              
-            Console.WriteLine("Exit");  
-        }                                              
-        else if  (input == "0")
-        {
-            break;
-        }
-        else 
-        {
-            Console.WriteLine("Invalid input");
+            case "1" : 
+                Console.WriteLine("Manage User selected");
+                ManageUserView manageUserView = new ManageUserView(userRepository);
+                await manageUserView.ManageUserAsync();
+                break;
+            
+            case "2" : 
+                Console.WriteLine("Posts");
+                ManagePostView managePostsView = new ManagePostView(postRepository,userRepository,commentRepository);
+                await managePostsView.ManagePostAsync();
+                break;
+            
+            case "3" :
+                Console.WriteLine("Exit");
+                return;
+            
+            default:
+                Console.WriteLine("Invalid input");
+                break; 
         } 
         }
     }
-
-    private async Task CreateUserAsync()
-    {
-        Console.WriteLine("Enter username: ");
-        
-        string? username  = Console.ReadLine();
-        
-        Console.WriteLine("Enter password: ");
-        
-        string? password = Console.ReadLine();
-    }
+    
 }

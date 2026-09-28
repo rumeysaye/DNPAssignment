@@ -5,7 +5,28 @@ namespace InMemoryRepositories;
 
 public class UserInMemoryRepository : IUserRepository
 {
-    private List<User> users = new();
+    private List<User> users = new()
+    {
+            new User
+            {
+            Id = 1,
+            UserName = "Alice",
+            Password = "1234"
+        },
+        new User
+        {
+            Id = 2,
+            UserName = "Bob",
+            Password = "1234"
+        },
+        new User
+        {
+            Id = 3,
+            UserName = "Charlie",
+            Password = "1234"
+        }
+    };
+
     
     public Task<User> AddAsync(User user)
     {
