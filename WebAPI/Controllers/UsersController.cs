@@ -11,7 +11,7 @@ namespace WebAPI.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IUserRepository userRepo;
-    
+
     public UsersController(IUserRepository userRepo)
     {
         this.userRepo = userRepo;
@@ -21,7 +21,7 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<UserDto>> AddUser([FromBody] CreateUserDto request)
     {
         try
-        { 
+        {
             await VerifyUserNameIsAvaiableAsync(request.UserName);
             User user = new()
             {
@@ -34,7 +34,7 @@ public class UsersController : ControllerBase
                 Id = created.Id,
                 UserName = created.UserName
             };
-            return Created($"/users/{dto.Id}", created);
+            return Created($"/users/{dto.Id}", dto);
         }
         catch (Exception e)
         {
@@ -44,20 +44,28 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<UserDto>> GetSingleUser([FromRoute]int id)
-    {
+    public async Task<ActionResult<UserDto>> GetSingleUser([FromRoute] int id)
+    { 
+        try 
+        {
+            
             User user = await userRepo.GetSingleAsync(id);
-
-            UserDto dto = new()
+            
+            UserDto dto = new() 
             {
-                Id = user.Id,
-                UserName = user.UserName
+            Id = user.Id,
+            UserName = user.UserName 
             };
-
-            return Ok(dto);
+            
+            return Ok(dto); 
+        }
+        catch (InvalidOperationException) 
+        { 
+            return NotFound($"User with ID {id} not found."); 
+        } 
     }
 
-    [HttpGet]
+[HttpGet]
     public ActionResult<IEnumerable<UserDto>> GetManyUsers(
     [FromQuery] string? username)
     {
@@ -84,19 +92,36 @@ public class UsersController : ControllerBase
         [FromRoute] int id,
         [FromBody] UserDto request)
     {
-        
-    User existingUser = await userRepo.GetSingleAsync(id);
-    existingUser.UserName = request.UserName;
-    await userRepo.UpdateAsync(existingUser);
-    return NoContent();
+        try
+        {
+            User existingUser = await userRepo.GetSingleAsync(id);
+
+            existingUser.UserName = request.UserName;
+
+            await userRepo.UpdateAsync(existingUser);
+
+            return NoContent();
+        }
+        catch (InvalidOperationException)
+        {
+            return NotFound($"User with ID {id} not found.");
+        }
     }
     
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteUser([FromRoute] int id)
     {
-        await userRepo.DeleteAsync(id);
+        try
+        {
+            await userRepo.GetSingleAsync(id);
+            await userRepo.DeleteAsync(id);
 
-        return NoContent();
+            return NoContent();
+        }
+        catch (InvalidOperationException)
+        {
+            return NotFound($"User with ID {id} not found.");
+        }
     }
 
     private Task VerifyUserNameIsAvaiableAsync(string username)
