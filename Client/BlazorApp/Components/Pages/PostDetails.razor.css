@@ -1,0 +1,115 @@
+
+.details-container {
+    max-width: 750px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.back-link {
+    display: inline-block;
+    color: #71865A;
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.back-link:hover {
+    color: #4B3428;
+    text-decoration: underline;
+}
+
+.post-card {
+    background-color: #FFFFFF;
+    border: 1px solid #E5D8C8;
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 35px;
+    box-shadow: 0 4px 12px rgba(75, 52, 40, 0.06);
+}
+
+.post-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #71865A;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.author-avatar {
+    background-color: #E8EEDF;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.post-card h1 {
+    color: #4B3428;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.post-body {
+    color: #59483C;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.comments-section h2 {
+    color: #4B3428;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.comment-card {
+    background-color: #FFFFFF;
+    border: 1px solid #E5D8C8;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.comment-card p {
+    color: #59483C;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    margin-bottom: 0;
+}
+
+.comment-form {
+    background-color: #F0E8DC;
+    border-radius: 16px;
+    padding: 25px;
+    margin-top: 30px;
+}
+
+.comment-form h3 {
+    color: #4B3428;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.comment-form textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #D8BEA3;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    color: #4B3428;
+    resize: vertical;
+    margin-bottom: 15px;
+}
+
+.comment-form textarea:focus {
+    outline: none;
+    border-color: #71865A;
+    box-shadow: 0 0 0 3px rgba(113, 134, 90, 0.15);
+}

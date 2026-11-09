@@ -28,15 +28,17 @@ public class PostsController : ControllerBase
             {
                 Title = request.Title,
                 Body = request.Body,
-                UserId = request.UserId
+                UserId = request.UserId,
             };
             Post created = await postRepo.AddAsync(post);
+            User? author = userRepo.GetManyAsync().FirstOrDefault(u=> u.Id == created.UserId);
             PostDto dto = new()
             {
                 Id = created.Id,
                 Title = created.Title,
                 Body = created.Body,
-                UserId = created.UserId
+                UserId = created.UserId,
+                UserName = author?.UserName ?? ""
             };
             return Created($"/posts/{dto.Id}", dto);
         }
@@ -53,13 +55,17 @@ public class PostsController : ControllerBase
         try
         {
             Post post = await postRepo.GetSingleAsync(id);
+            User? author = userRepo.GetManyAsync()
+                .FirstOrDefault(u => u.Id == post.UserId);
 
             PostDto dto = new()
             {
                 Id = post.Id,
                 Title = post.Title,
                 Body = post.Body,
-                UserId = post.UserId
+                UserId = post.UserId,
+                UserName = author?.UserName ?? ""
+          
             };
 
             return Ok(dto);
@@ -79,6 +85,7 @@ public class PostsController : ControllerBase
         IQueryable<Post> posts = postRepo.GetManyAsync();
         IQueryable<User> users = userRepo.GetManyAsync();
 
+        
         List<PostDto> dtos = new();
 
         foreach (Post post in posts)
@@ -95,11 +102,11 @@ public class PostsController : ControllerBase
             {
                 continue;
             }
-
+            
+            User? author = users.FirstOrDefault(u => u.Id == post.UserId);
             // Filter after username
             if (!string.IsNullOrEmpty(username))
             {
-                User? author = users.FirstOrDefault(u => u.Id == post.UserId);
 
                 if (author == null ||
                     !author.UserName.Contains(username, StringComparison.OrdinalIgnoreCase))
@@ -113,7 +120,8 @@ public class PostsController : ControllerBase
                 Id = post.Id,
                 Title = post.Title,
                 Body = post.Body,
-                UserId = post.UserId
+                UserId = post.UserId,
+                UserName = author?.UserName ?? ""
             };
             dtos.Add(dto);
         }
@@ -160,5 +168,7 @@ public class PostsController : ControllerBase
             return NotFound($"Post with ID {id} not found.");
         }
     }
+    
+    
 }
 

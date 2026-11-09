@@ -1,0 +1,32 @@
+.home-hero {
+    text-align: center;
+    max-width: 750px;
+    margin: 100px auto;
+    padding: 40px 20px;
+}
+
+.home-hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #4B3428;
+    margin-bottom: 20px;
+}
+
+.home-hero h3 {
+    color: #71865A;
+    font-weight: 500;
+    margin-bottom: 25px;
+}
+
+.home-hero p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 35px;
+}
+
+.home-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}

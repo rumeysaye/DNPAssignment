@@ -1,0 +1,74 @@
+@page "/CreatePost"
+@using ApiContracts
+@using BlazorApp.Services
+@inject IPostService PostService
+
+<PageTitle>Brew & Bond | Create Post</PageTitle>
+
+<div class="create-container">
+
+    <div class="create-header">
+        <h1>Spill the Beans ☕</h1>
+        <p>Got something brewing? Share it with the community!</p>
+    </div>
+
+    <div class="create-card">
+
+        <div class="form-group">
+            <label for="post-title">What's on your mind?</label>
+
+            <input id="post-title"
+                   @bind="title"
+                   placeholder="Give your post a title..." />
+        </div>
+
+        <div class="form-group">
+            <label for="post-body">Your story</label>
+
+            <textarea id="post-body"
+                      @bind="body"
+                      placeholder="Spill the beans..."
+                      rows="6"></textarea>
+        </div>
+
+        <button class="btn btn-primary"
+                @onclick="AddPost">
+            Share Post ☕
+        </button>
+
+        @if (successMessage != null)
+        {
+            <p class="success-message">@successMessage</p>
+        }
+
+    </div>
+
+</div>
+
+@code {
+    private string title = "";
+    private string body = "";
+    private string? successMessage;
+
+    private async Task AddPost()
+    {
+        if (string.IsNullOrWhiteSpace(title) ||
+            string.IsNullOrWhiteSpace(body))
+        {
+            return;
+        }
+
+        CreatePostDto request = new CreatePostDto
+        {
+            Title = title,
+            Body = body,
+            UserId = 1
+        };
+
+        await PostService.AddPostAsync(request);
+
+        title = "";
+        body = "";
+        successMessage = "☕ Espresso yourself! Your post has been shared.";
+    }
+}

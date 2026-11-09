@@ -1,0 +1,60 @@
+@page "/posts"
+@using ApiContracts
+@using BlazorApp.Services
+@inject IPostService PostService
+
+
+<PageTitle>Brew & Bond | Posts</PageTitle>
+
+<div class="feed-container">
+
+    <div class="feed-header">
+        <h1>The Coffee Feed ☕</h1>
+        <p>Fresh conversations, warm connections.</p>
+
+        <a href="/create-post" class="btn btn-primary">
+            + New Post
+        </a>
+    </div>
+
+
+    @if (posts == null)
+    {
+        <p>Loading posts...</p>
+    }
+    else if (!posts.Any())
+    {
+        <p>No posts yet. Be the first to share</p>
+    }
+    else
+    {
+        @foreach (PostDto post in posts)
+        {
+            <div class="post-card" @key="post.Id">
+        
+                <div class="post-author">
+                    <span class="author-avatar">☕</span>
+                    <span>@post.UserName</span>
+                </div>
+        
+                <h3>@post.Title</h3>
+                <p class="post-body">@post.Body</p>
+            
+                <a href="@($"/posts/{post.Id}")"
+                   class="post-link">
+                    View discussion →
+                </a>
+        
+            </div>
+        }
+    }
+</div>
+
+@code {
+    private IEnumerable<PostDto>? posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await PostService.GetPostsAsync();
+    }
+}

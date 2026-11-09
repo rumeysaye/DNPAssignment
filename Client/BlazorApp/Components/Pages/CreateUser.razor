@@ -1,0 +1,73 @@
+@page "/CreateUser"
+@using ApiContracts
+@using BlazorApp.Services
+@inject IUserService UserService
+
+<PageTitle>Brew & Bond | Sign Up</PageTitle>
+
+<div class="signup-container">
+
+    <div class="signup-header">
+        <h1>Join the Brew Crew ☕</h1>
+        <p>Your next favorite coffee conversation starts here.</p>
+    </div>
+
+    <div class="signup-card">
+
+        <div class="form-group">
+            <label for="username">Username</label>
+
+            <input id="username"
+                   @bind="userName"
+                   placeholder="Choose your username..." />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+
+            <input id="password"
+                   type="password"
+                   @bind="password"
+                   placeholder="Create a password..." />
+        </div>
+
+        <button class="btn btn-primary"
+                @onclick="AddUser">
+            Create Account ☕
+        </button>
+
+        @if (successMessage != null)
+        {
+            <p class="success-message">@successMessage</p>
+        }
+
+    </div>
+
+</div>
+
+@code {
+    private string userName = "";
+    private string password = "";
+    private string? successMessage;
+
+    private async Task AddUser()
+    {
+        if (string.IsNullOrWhiteSpace(userName) ||
+            string.IsNullOrWhiteSpace(password))
+        {
+            return;
+        }
+
+        CreateUserDto request = new CreateUserDto
+        {
+            UserName = userName,
+            Password = password
+        };
+
+        await UserService.AddUserAsync(request);
+
+        userName = "";
+        password = "";
+        successMessage = "☕ Welcome to the Brew Crew! Your account has been created.";
+    }
+}
